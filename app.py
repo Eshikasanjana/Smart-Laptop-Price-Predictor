@@ -11,7 +11,7 @@ import streamlit.components.v1 as components
 st.set_page_config(page_title="Laptop Price Predictor", layout="wide")
 
 # ------------------ PATHS ------------------
-BASE_PATH = "/Users/eshikasanjana/Documents/Laptop-Price-Predictor-main"
+BASE_PATH = "/Users/eshikasanjana/Documents/Smart-Laptop-Price-Predictor"
 PIPE_PATH = os.path.join(BASE_PATH, "pipe.pkl")
 TRAINED_CSV = os.path.join(BASE_PATH, "traineddata_updated.csv")
 USD_RATE = 87.0
@@ -237,3 +237,4 @@ body {{
 """
 
 components.html(HTML_UI, height=700)
+
