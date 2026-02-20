@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 912b6f5 (Update logic to validate output against API data)
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,6 +11,55 @@ import warnings
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 import streamlit.components.v1 as components
+<<<<<<< HEAD
+=======
+import requests
+from dotenv import load_dotenv
+import os
+
+# Force dotenv to override anything else
+load_dotenv(dotenv_path=".env", override=True)
+
+API_KEY = os.getenv("SERPER_API_KEY")
+
+def get_live_price(query):
+    if not API_KEY:
+        return None
+
+    url = "https://google.serper.dev/shopping"
+    payload = {"q": query}
+    headers = {
+        'X-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+    }
+    try:
+        # 1. Send the request
+        print("Sending request..." )
+        response = requests.post(url, json=payload, headers=headers, timeout=5)
+        response.raise_for_status() # Check if the API key is valid/working
+        data = response.json()
+        print(f"API Response for '{query}': {data}") # Debug log to see the raw response
+        
+        # 2. Extract price from results
+        prices = []
+        if 'shopping' in data:
+            for item in data['shopping']:
+                # Clean "$1,200.00" -> 1200.0
+                price_str = item.get('price', '').replace('$', '').replace(',', '')
+                if price_str:
+                    try:
+                        prices.append(float(price_str))
+                    except ValueError:
+                        continue
+        
+        # 3. Return the lowest market price found
+        return min(prices) if prices else None
+
+    except requests.exceptions.RequestException as e:
+        # This catches internet issues, timeouts, or API errors
+        print(f"Connection error: {e}")
+        return None
+>>>>>>> 912b6f5 (Update logic to validate output against API data)
 
 st.set_page_config(page_title="Laptop Price Predictor", layout="wide")
 
@@ -138,11 +191,39 @@ for col in expected_cols:
 query_df = pd.DataFrame([row], columns=expected_cols)
 
 # ------------------ RUN MODEL ------------------
+<<<<<<< HEAD
 predicted=None
 if predict_clicked:
     pred = rf.predict(query_df)[0]
     if pred<=50: pred=np.exp(pred)
     predicted = pred/USD_RATE
+=======
+predicted = None
+live_price = None
+badge_html = "" # For the Value for Money score
+
+if predict_clicked:
+    pred = rf.predict(query_df)[0]
+    if pred <= 50: pred = np.exp(pred)
+    predicted = pred / USD_RATE
+    
+    # 1. Fetch live price
+    print()
+    search_query = f"{company} {type_name} {cpu} {ram}GB RAM"
+    live_price = get_live_price(search_query)
+    
+    # 2. Logic for "Value for Money" Score
+    if live_price:
+        diff = predicted - live_price
+        if diff > 50:
+            badge_text, color = "🔥 GREAT DEAL", "#28a745"
+        elif diff < -50:
+            badge_text, color = "⚠️ OVERPRICED", "#dc3545"
+        else:
+            badge_text, color = "✅ FAIR PRICE", "#007bff"
+            
+        badge_html = f'<div style="background:{color}; color:white; padding:4px 12px; border-radius:20px; display:inline-block; font-size:12px; font-weight:bold; margin-bottom:10px;">{badge_text}</div>'
+>>>>>>> 912b6f5 (Update logic to validate output against API data)
 
 # -------------- INJECT CSS FOR SIDEBAR BUTTON (blue) --------------
 # This styles the Streamlit sidebar button so it appears blue like your left UI button.
@@ -166,6 +247,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+<<<<<<< HEAD
 # ------------------ HTML UI (NO CHATGPT IMAGES) ------------------
 HTML_UI = f"""
 <style>
@@ -232,9 +314,48 @@ body {{
             </div>
         </div>
 
+=======
+# ------------------ HTML UI ------------------
+
+HTML_UI = f"""
+<style>
+body {{ font-family: Inter, sans-serif; }}
+.container {{ display:flex; gap:30px; margin-top:20px; }}
+.right-col {{ flex:1; display:flex; flex-direction:column; gap:20px; }}
+.card {{ background:white; padding:20px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.06); }}
+.price {{ font-size:34px; font-weight:700; margin-top:10px; }}
+.range {{ margin-top:6px; color:#555; }}
+</style>
+
+<div class="container">
+    <div class="right-col">
+        <div class="card">
+            <h4>Laptop Summary Preview</h4>
+            <div><strong>Brand:</strong> {company}</div>
+            <div><strong>Specs:</strong> {cpu} | {ram}GB RAM | {ssd}GB SSD</div>
+            <div><strong>Display:</strong> {screen_size}" {resolution}</div>
+        </div>
+
+        <div class="card">
+            <h4>Estimated Price</h4>
+            {badge_html}
+            <div class="price">{ "$" + format(predicted, ",.2f") if predicted is not None else "—" }</div>
+            
+            <div class="range">
+                <strong>Market Low:</strong> { f"${live_price:,.2f}" if live_price else "Searching market..." if predict_clicked else "—" }
+            </div>
+            <div class="range" style="font-size: 12px; color: #888;">
+                { f"AI Confidence Range: ${predicted*0.9:,.2f} - ${predicted*1.1:,.2f}" if predicted else "" }
+            </div>
+        </div>
+>>>>>>> 912b6f5 (Update logic to validate output against API data)
     </div>
 </div>
 """
 
+<<<<<<< HEAD
 components.html(HTML_UI, height=700)
 
+=======
+components.html(HTML_UI, height=500)
+>>>>>>> 912b6f5 (Update logic to validate output against API data)

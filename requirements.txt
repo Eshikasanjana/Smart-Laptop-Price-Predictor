@@ -7,4 +7,11 @@ xgboost
 joblib
 jupyter
 notebook
+<<<<<<< HEAD
 ipykernel
+=======
+ipykernel
+streamlit
+python-dotenv
+requests
+>>>>>>> 912b6f5 (Update logic to validate output against API data)
