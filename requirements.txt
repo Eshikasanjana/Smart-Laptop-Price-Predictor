@@ -11,3 +11,5 @@ ipykernel
 streamlit
 python-dotenv
 requests
+altair<5
+
