@@ -5,9 +5,4 @@ streamlit>=1.31.0
 altair>=5.0.0
 python-dotenv
 requests
-<<<<<<< HEAD
-=======
 
-
-
->>>>>>> f4be949fe8dd9be70036a11019cdeb44991c71b1
