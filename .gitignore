@@ -3,9 +3,8 @@ __pycache__/
 *.pyc
 
 # Model & data files
-*.pkl
-*.csv
 
 # System files
 .DS_Store
 .vscode/
+
