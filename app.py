@@ -58,7 +58,7 @@ def get_live_price(query):
 st.set_page_config(page_title="Laptop Price Predictor", layout="wide")
 
 # ------------------ PATHS ------------------
-BASE_PATH = "/Users/eshikasanjana/Documents/Smart-Laptop-Price-Predictor"
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 PIPE_PATH = os.path.join(BASE_PATH, "pipe.pkl")
 TRAINED_CSV = os.path.join(BASE_PATH, "traineddata_updated.csv")
 USD_RATE = 87.0
@@ -269,5 +269,6 @@ body {{ font-family: Inter, sans-serif; }}
     </div>
 </div>
 """
+
 
 components.html(HTML_UI, height=500)
