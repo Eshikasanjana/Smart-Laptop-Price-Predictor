@@ -1,15 +1,8 @@
 pandas
 numpy
-matplotlib
-seaborn
 scikit-learn
-xgboost
-joblib
-jupyter
-notebook
-ipykernel
 streamlit
 python-dotenv
 requests
-altair<5
+
 
