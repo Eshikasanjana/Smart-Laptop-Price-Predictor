@@ -55,7 +55,7 @@ def get_live_price(query):
         print(f"Connection error: {e}")
         return None
 
-st.set_page_config(page_title="Laptop Price Predictor", layout="wide")
+st.set_page_config(page_title="Smart Price Prediction System", layout="wide")
 
 # ------------------ PATHS ------------------
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -272,3 +272,4 @@ body {{ font-family: Inter, sans-serif; }}
 
 
 components.html(HTML_UI, height=500)
+
